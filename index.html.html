@@ -1,0 +1,212 @@
+<title>Cumple de Benja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/* Layout: a single phone-width invitation column; a living dino scene on top, details below as stacked "tickets". Single deliberate look (bright day). */
+:root{
+  --sky:#BFE8F7; --grass:#7CC95E; --grass-dark:#4E9A3A;
+  --sun:#FFC93C; --coral:#FF6F59; --ink:#203A2B; --paper:#FFFDF6; --muted:#55705F;
+  --dino:#3FAE8A; --dino-belly:#BEEBC9;
+  --display:'Fredoka', 'Trebuchet MS', sans-serif; --body:'Nunito', 'Segoe UI', sans-serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+body{background:var(--sky);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:460px;margin:0 auto;padding-inline:16px;padding-block:20px 40px;display:flex;flex-direction:column;gap:18px}
+.scene{position:relative;height:360px;border-radius:28px;overflow:hidden;background:linear-gradient(var(--sky),#E6F7FD 70%);border:4px solid var(--ink)}
+.sunball{position:absolute;top:22px;right:26px;width:62px;height:62px;border-radius:50%;background:var(--sun);box-shadow:0 0 0 10px rgba(255,201,60,.25);animation:pulse 3s ease-in-out infinite}
+.cloud{position:absolute;height:26px;width:80px;background:#fff;border-radius:20px;opacity:.95;animation:drift 22s linear infinite}
+.cloud::before{content:"";position:absolute;width:38px;height:38px;border-radius:50%;background:#fff;left:14px;top:-16px}
+.c1{top:46px;left:-90px}.c2{top:96px;left:-90px;animation-delay:-11s;transform:scale(.7)}
+.ground{position:absolute;left:0;right:0;bottom:0;height:86px;background:var(--grass);border-top:4px solid var(--grass-dark)}
+.title{position:absolute;top:18px;left:20px;font-family:var(--display);font-weight:700;color:var(--ink);line-height:1}
+.title small{display:block;font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.title b{display:block;font-size:46px}
+.title .age{display:inline-grid;place-items:center;width:58px;height:58px;border-radius:50%;background:var(--coral);color:#fff;font-size:36px;margin-top:6px;transform:rotate(-8deg);border:3px solid var(--ink)}
+.dino-btn{position:absolute;bottom:62px;left:0;background:none;border:0;padding:0;cursor:pointer;animation:walk 9s ease-in-out infinite alternate}
+.dino-btn:focus-visible{outline:3px dashed var(--coral);outline-offset:6px;border-radius:12px}
+.dino{width:150px;height:auto;display:block;transform-origin:50% 100%;animation:bob .5s ease-in-out infinite alternate}
+.dino-btn.flip .dino{transform:scaleX(-1)}
+.dino-btn.jump .dino{animation:jump .7s cubic-bezier(.3,1.6,.5,1)}
+.bubble{position:absolute;bottom:186px;left:0;z-index:3;transform:translateX(-50%) scale(.2);opacity:0;transform-origin:bottom center;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:16px;padding:6px 14px;font-family:var(--display);font-weight:700;font-size:17px;white-space:nowrap;transition:transform .25s, opacity .25s;pointer-events:none}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-10px;width:14px;height:14px;background:#fff;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:translateX(-50%) rotate(45deg)}
+.bubble.show{transform:translateX(-50%) scale(1);opacity:1}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.who .field{background:#fff;border:3px dashed var(--grass-dark);border-radius:16px;padding:10px;align-items:center}
+.hint{position:absolute;right:14px;bottom:14px;background:var(--ink);color:#fff;font-size:13px;font-weight:800;padding:6px 12px;border-radius:99px}
+.card{background:var(--paper);border:4px solid var(--ink);border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.card h2{margin:0;font-family:var(--display);font-size:24px;line-height:1.1}
+.lead{font-size:18px;margin:0}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.fact{background:#fff;border:3px dashed var(--grass-dark);border-radius:16px;padding:10px 6px;text-align:center}
+.fact span{display:block;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.fact b{display:block;font-family:var(--display);font-size:20px;line-height:1.15}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border-radius:16px;border:3px solid var(--ink);background:var(--sun);color:var(--ink);font-family:var(--display);font-weight:700;font-size:18px;text-decoration:none;cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .1s, box-shadow .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.btn:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+.btn.coral{background:var(--coral);color:#fff}
+.btn svg{width:22px;height:22px;flex:none}
+label{font-weight:800;font-size:15px}
+input[type=text]{width:100%;min-height:48px;border:3px solid var(--ink);border-radius:14px;padding:0 14px;font:inherit;background:#fff;color:var(--ink)}
+.stepper{display:flex;align-items:center;gap:12px}
+.stepper button{width:48px;height:48px;border-radius:50%;border:3px solid var(--ink);background:#fff;font-family:var(--display);font-size:26px;cursor:pointer;color:var(--ink)}
+.stepper output{font-family:var(--display);font-size:30px;min-width:40px;text-align:center}
+.field{display:flex;flex-direction:column;gap:6px}
+.done{background:var(--grass);color:#fff;border-radius:14px;padding:10px 14px;font-weight:800}
+.foot{text-align:center;font-size:13px;color:var(--muted)}
+.foot a{color:var(--ink);font-weight:800}
+.demo{align-self:center;background:var(--ink);color:#fff;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:99px}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:5;width:100%;height:100%}
+@keyframes walk{from{left:4%}to{left:calc(96% - 150px)}}
+@keyframes bob{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-6px) rotate(2deg)}}
+@keyframes jump{0%{transform:translateY(0)}45%{transform:translateY(-90px) rotate(-10deg)}100%{transform:translateY(0)}}
+@keyframes drift{to{left:110%}}
+@keyframes pulse{50%{box-shadow:0 0 0 18px rgba(255,201,60,.15)}}
+@media (prefers-reduced-motion:reduce){.dino-btn,.dino,.cloud,.sunball{animation:none}.dino-btn{left:30%}}
+</style>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<main class="wrap">
+  <span class="demo">Demo · Anse Studio</span>
+
+  <section class="scene" aria-label="Rex, el dinosaurio de la fiesta">
+    <div class="sunball" aria-hidden="true"></div>
+    <div class="cloud c1" aria-hidden="true"></div><div class="cloud c2" aria-hidden="true"></div>
+    <div class="title"><small>Fiesta jurásica de</small><b>Benja</b><span class="age">5</span></div>
+    <div class="ground" aria-hidden="true"></div>
+    <div class="bubble" id="bubble" aria-live="polite">¡Hola! Soy Rex</div>
+    <button class="dino-btn" id="dino" type="button" aria-label="Tocá a Rex">
+      <svg class="dino" viewBox="0 0 200 150" aria-hidden="true">
+        <path d="M30 100 Q5 95 8 70 Q30 92 52 88Z" fill="var(--dino)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+        <ellipse cx="85" cy="92" rx="48" ry="36" fill="var(--dino)" stroke="var(--ink)" stroke-width="4"/>
+        <ellipse cx="90" cy="102" rx="30" ry="20" fill="var(--dino-belly)"/>
+        <path d="M60 60 l8-14 8 12 8-15 8 14 8-12 6 14" fill="var(--sun)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M118 78 Q120 40 140 30 Q178 22 186 48 Q190 66 168 70 L132 84Z" fill="var(--dino)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+        <circle cx="158" cy="44" r="7" fill="#fff" stroke="var(--ink)" stroke-width="3"/>
+        <circle cx="160" cy="45" r="3.5" fill="var(--ink)"/>
+        <path d="M166 60 Q174 64 182 58" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="148" cy="58" r="5" fill="var(--coral)" opacity=".6"/>
+        <path d="M120 96 l14 6" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+        <rect x="62" y="116" width="16" height="24" rx="6" fill="var(--dino)" stroke="var(--ink)" stroke-width="4"/>
+        <rect x="96" y="116" width="16" height="24" rx="6" fill="var(--dino)" stroke="var(--ink)" stroke-width="4"/>
+        <path d="M140 30 l6-14 6 12" fill="var(--coral)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <span class="hint" aria-hidden="true">Tocá a Rex</span>
+  </section>
+
+  <section class="card">
+    <p class="lead">¡Benja cumple 5 y lo festeja con una aventura de dinosaurios! Vení con ganas de jugar.</p>
+    <div class="facts">
+      <div class="fact"><span>Sábado</span><b>14 nov</b></div>
+      <div class="fact"><span>Horario</span><b>16 a 19 h</b></div>
+      <div class="fact"><span>Lugar</span><b>Salón Las Glicinas</b></div>
+    </div>
+    <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lan%C3%BAs%2C%20Buenos%20Aires" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+      Cómo llegar
+    </a>
+  </section>
+
+  <section class="card" aria-labelledby="rsvp-t">
+    <h2 id="rsvp-t">¿Venís a la aventura?</h2>
+    <div class="field">
+      <label for="kid">Tu nombre o el de tu familia</label>
+      <input id="kid" type="text" placeholder="Ej: Familia Gómez" autocomplete="off">
+    </div>
+    <div class="who">
+      <div class="field">
+        <span style="font-weight:800;font-size:15px" id="kids-l">Chicos</span>
+        <div class="stepper" role="group" aria-labelledby="kids-l">
+          <button type="button" data-k="kids" data-d="-1" aria-label="Un chico menos">−</button>
+          <output id="kids" aria-live="polite">1</output>
+          <button type="button" data-k="kids" data-d="1" aria-label="Un chico más">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <span style="font-weight:800;font-size:15px" id="adults-l">Adultos</span>
+        <div class="stepper" role="group" aria-labelledby="adults-l">
+          <button type="button" data-k="adults" data-d="-1" aria-label="Un adulto menos">−</button>
+          <output id="adults" aria-live="polite">1</output>
+          <button type="button" data-k="adults" data-d="1" aria-label="Un adulto más">+</button>
+        </div>
+      </div>
+    </div>
+    <a class="btn coral" id="confirm" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+      Confirmar por WhatsApp
+    </a>
+    <div class="done" id="done" hidden>¡Genial! Rex ya está bailando de alegría 🦖</div>
+  </section>
+
+  <p class="foot">Invitación diseñada por <a href="https://www.instagram.com/anse_studio_/" target="_blank" rel="noopener">Anse Studio</a></p>
+</main>
+
+<script>
+(function(){
+  var WA='5491169455966';
+  var dino=document.getElementById('dino'), bubble=document.getElementById('bubble'), scene=document.querySelector('.scene');
+  var lastX=null, hideT=null;
+  // keep the speech bubble above Rex and flip him to face where he walks
+  function follow(){
+    var s=scene.getBoundingClientRect(), d=dino.getBoundingClientRect();
+    var cx=d.left-s.left+d.width/2, half=bubble.offsetWidth/2+8;
+    bubble.style.left=Math.min(Math.max(cx,half),s.width-half)+'px';
+    if(lastX!==null && Math.abs(d.left-lastX)>0.3) dino.classList.toggle('flip', d.left<lastX);
+    lastX=d.left;
+    requestAnimationFrame(follow);
+  }
+  requestAnimationFrame(follow);
+  function say(t,ms){
+    bubble.textContent=t; bubble.classList.add('show');
+    clearTimeout(hideT); hideT=setTimeout(function(){bubble.classList.remove('show')},ms||2200);
+  }
+  var lines=['¡Hola! Soy Rex','¡Te espero el sábado!','¡Tocame y salto!'], li=0;
+  setTimeout(function(){say(lines[0])},600);
+  setInterval(function(){ if(!bubble.classList.contains('show')){li=(li+1)%lines.length;say(lines[li]);} },5000);
+  dino.addEventListener('click',function(){
+    dino.classList.remove('jump'); void dino.offsetWidth; dino.classList.add('jump');
+    say('¡Rooaar! ¡Te espero!',2400); burst(60);
+  });
+
+  var counts={kids:1,adults:1};
+  var confirm=document.getElementById('confirm');
+  function plural(n,a,b){return n+' '+(n===1?a:b)}
+  function refresh(){
+    var who=document.getElementById('kid').value.trim()||'[nombre]';
+    var parts=[];
+    if(counts.kids) parts.push(plural(counts.kids,'chico','chicos'));
+    if(counts.adults) parts.push(plural(counts.adults,'adulto','adultos'));
+    var msg='¡Hola! Confirmo asistencia al cumple de Benja 🦖 Somos '+who+': '+(parts.join(' y ')||'nadie')+'.';
+    confirm.href='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
+  }
+  document.querySelectorAll('[data-k]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var k=b.dataset.k; counts[k]=Math.min(10,Math.max(0,counts[k]+(+b.dataset.d)));
+      document.getElementById(k).textContent=counts[k]; refresh();
+    });
+  });
+  document.getElementById('kid').addEventListener('input',refresh);
+  refresh();
+  confirm.addEventListener('click',function(){burst(140);document.getElementById('done').hidden=false;});
+
+  // confetti
+  var cv=document.getElementById('confetti'), ctx=cv.getContext('2d'), parts=[], raf=null;
+  var cols=['#FF6F59','#FFC93C','#3FAE8A','#7CC95E','#5BC0EB'];
+  function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;}
+  size(); addEventListener('resize',size);
+  function burst(k){
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    for(var i=0;i<k;i++) parts.push({x:cv.width/2,y:cv.height*0.35,vx:(Math.random()-.5)*16*devicePixelRatio,vy:(-Math.random()*14-4)*devicePixelRatio,r:(4+Math.random()*5)*devicePixelRatio,c:cols[i%5],a:Math.random()*6,life:0});
+    if(!raf) raf=requestAnimationFrame(tick);
+  }
+  function tick(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    parts.forEach(function(p){p.vy+=.45*devicePixelRatio;p.x+=p.vx;p.y+=p.vy;p.a+=.2;p.life++;
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.fillStyle=p.c;ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);ctx.restore();});
+    parts=parts.filter(function(p){return p.y<cv.height+40&&p.life<200});
+    raf=parts.length?requestAnimationFrame(tick):null;
+    if(!raf) ctx.clearRect(0,0,cv.width,cv.height);
+  }
+})();
+</script>
