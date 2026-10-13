@@ -1,70 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cumple de Benja</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
 <style>
-/* Layout: a single phone-width invitation column; a living dino scene on top, details below as stacked "tickets". Single deliberate look (bright day). */
+/* Layout: phone = one column (scene, then cards). Tablet = wider column. Desktop (>=880px) = two columns: the living dino scene stays on the left while the cards scroll on the right. Single deliberate look (bright day). */
 :root{
   --sky:#BFE8F7; --grass:#7CC95E; --grass-dark:#4E9A3A;
   --sun:#FFC93C; --coral:#FF6F59; --ink:#203A2B; --paper:#FFFDF6; --muted:#55705F;
   --dino:#3FAE8A; --dino-belly:#BEEBC9;
   --display:'Fredoka', 'Trebuchet MS', sans-serif; --body:'Nunito', 'Segoe UI', sans-serif;
+  --dino-w:clamp(110px, 30vw, 170px);   /* Rex grows with the screen */
+  --ground:clamp(64px, 16vw, 92px);
   color-scheme: light;
 }
 *{box-sizing:border-box}
-body{background:var(--sky);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
-.wrap{max-width:460px;margin:0 auto;padding-inline:16px;padding-block:20px 40px;display:flex;flex-direction:column;gap:18px}
-.scene{position:relative;height:360px;border-radius:28px;overflow:hidden;background:linear-gradient(var(--sky),#E6F7FD 70%);border:4px solid var(--ink)}
-.sunball{position:absolute;top:22px;right:26px;width:62px;height:62px;border-radius:50%;background:var(--sun);box-shadow:0 0 0 10px rgba(255,201,60,.25);animation:pulse 3s ease-in-out infinite}
+html,body{min-height:100%}
+body{margin:0;background:var(--sky);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;overflow-x:hidden}
+.wrap{max-width:520px;margin:0 auto;padding-inline:16px;padding-block:20px 40px;display:flex;flex-direction:column;gap:18px}
+.side{display:flex;flex-direction:column;gap:18px;min-width:0}
+
+/* scene */
+.scene{position:relative;height:clamp(320px, 95vw, 460px);border-radius:28px;overflow:hidden;background:linear-gradient(var(--sky),#E6F7FD 70%);border:4px solid var(--ink)}
+.sunball{position:absolute;top:22px;right:26px;width:clamp(44px,12vw,70px);aspect-ratio:1;border-radius:50%;background:var(--sun);box-shadow:0 0 0 10px rgba(255,201,60,.25);animation:pulse 3s ease-in-out infinite}
 .cloud{position:absolute;height:26px;width:80px;background:#fff;border-radius:20px;opacity:.95;animation:drift 22s linear infinite}
 .cloud::before{content:"";position:absolute;width:38px;height:38px;border-radius:50%;background:#fff;left:14px;top:-16px}
 .c1{top:46px;left:-90px}.c2{top:96px;left:-90px;animation-delay:-11s;transform:scale(.7)}
-.ground{position:absolute;left:0;right:0;bottom:0;height:86px;background:var(--grass);border-top:4px solid var(--grass-dark)}
-.title{position:absolute;top:18px;left:20px;font-family:var(--display);font-weight:700;color:var(--ink);line-height:1}
-.title small{display:block;font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.title b{display:block;font-size:46px}
-.title .age{display:inline-grid;place-items:center;width:58px;height:58px;border-radius:50%;background:var(--coral);color:#fff;font-size:36px;margin-top:6px;transform:rotate(-8deg);border:3px solid var(--ink)}
-.dino-btn{position:absolute;bottom:62px;left:0;background:none;border:0;padding:0;cursor:pointer;animation:walk 9s ease-in-out infinite alternate}
+.ground{position:absolute;left:0;right:0;bottom:0;height:var(--ground);background:var(--grass);border-top:4px solid var(--grass-dark)}
+.title{position:absolute;top:18px;left:20px;right:90px;font-family:var(--display);font-weight:700;color:var(--ink);line-height:1}
+.title small{display:block;font-size:clamp(12px,3.4vw,16px);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.title b{display:block;font-size:clamp(34px,11vw,60px)}
+.title .age{display:inline-grid;place-items:center;width:clamp(46px,13vw,64px);aspect-ratio:1;border-radius:50%;background:var(--coral);color:#fff;font-size:clamp(28px,8vw,40px);margin-top:6px;transform:rotate(-8deg);border:3px solid var(--ink)}
+.dino-btn{position:absolute;bottom:calc(var(--ground) - 24px);left:0;background:none;border:0;padding:0;cursor:pointer;animation:walk 9s ease-in-out infinite alternate}
 .dino-btn:focus-visible{outline:3px dashed var(--coral);outline-offset:6px;border-radius:12px}
-.dino{width:150px;height:auto;display:block;transform-origin:50% 100%;animation:bob .5s ease-in-out infinite alternate}
+.dino{width:var(--dino-w);height:auto;display:block;transform-origin:50% 100%;animation:bob .5s ease-in-out infinite alternate}
 .dino-btn.flip .dino{transform:scaleX(-1)}
 .dino-btn.jump .dino{animation:jump .7s cubic-bezier(.3,1.6,.5,1)}
-.bubble{position:absolute;bottom:186px;left:0;z-index:3;transform:translateX(-50%) scale(.2);opacity:0;transform-origin:bottom center;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:16px;padding:6px 14px;font-family:var(--display);font-weight:700;font-size:17px;white-space:nowrap;transition:transform .25s, opacity .25s;pointer-events:none}
+.bubble{position:absolute;bottom:calc(var(--ground) - 24px + var(--dino-w) * .75 + 14px);left:0;z-index:3;transform:translateX(-50%) scale(.2);opacity:0;transform-origin:bottom center;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:16px;padding:6px 14px;font-family:var(--display);font-weight:700;font-size:clamp(14px,4vw,18px);white-space:nowrap;transition:transform .25s, opacity .25s;pointer-events:none}
 .bubble::after{content:"";position:absolute;left:50%;bottom:-10px;width:14px;height:14px;background:#fff;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:translateX(-50%) rotate(45deg)}
 .bubble.show{transform:translateX(-50%) scale(1);opacity:1}
-.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
-.who .field{background:#fff;border:3px dashed var(--grass-dark);border-radius:16px;padding:10px;align-items:center}
 .hint{position:absolute;right:14px;bottom:14px;background:var(--ink);color:#fff;font-size:13px;font-weight:800;padding:6px 12px;border-radius:99px}
-.card{background:var(--paper);border:4px solid var(--ink);border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:12px}
-.card h2{margin:0;font-family:var(--display);font-size:24px;line-height:1.1}
-.lead{font-size:18px;margin:0}
-.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.fact{background:#fff;border:3px dashed var(--grass-dark);border-radius:16px;padding:10px 6px;text-align:center}
+
+/* cards */
+.card{background:var(--paper);border:4px solid var(--ink);border-radius:24px;padding:clamp(16px,4.5vw,26px);display:flex;flex-direction:column;gap:14px;min-width:0}
+.card h2{margin:0;font-family:var(--display);font-size:clamp(22px,6vw,28px);line-height:1.1}
+.lead{font-size:clamp(16px,4.4vw,19px);margin:0}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.fact:last-child{grid-column:1/-1}
+@media (min-width:520px){.facts{grid-template-columns:repeat(3,minmax(0,1fr))}.fact:last-child{grid-column:auto}}
+.fact{background:#fff;border:3px dashed var(--grass-dark);border-radius:16px;padding:10px 8px;text-align:center;min-width:0}
 .fact span{display:block;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.fact b{display:block;font-family:var(--display);font-size:20px;line-height:1.15}
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border-radius:16px;border:3px solid var(--ink);background:var(--sun);color:var(--ink);font-family:var(--display);font-weight:700;font-size:18px;text-decoration:none;cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .1s, box-shadow .1s}
+.fact b{display:block;font-family:var(--display);font-size:clamp(17px,4.6vw,21px);line-height:1.15;overflow-wrap:anywhere}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding-inline:16px;border-radius:16px;border:3px solid var(--ink);background:var(--sun);color:var(--ink);font-family:var(--display);font-weight:700;font-size:18px;text-align:center;text-decoration:none;cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .1s, box-shadow .1s}
+.btn:hover{filter:brightness(1.04)}
 .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
 .btn:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
 .btn.coral{background:var(--coral);color:#fff}
 .btn svg{width:22px;height:22px;flex:none}
-label{font-weight:800;font-size:15px}
-input[type=text]{width:100%;min-height:48px;border:3px solid var(--ink);border-radius:14px;padding:0 14px;font:inherit;background:#fff;color:var(--ink)}
-.stepper{display:flex;align-items:center;gap:12px}
-.stepper button{width:48px;height:48px;border-radius:50%;border:3px solid var(--ink);background:#fff;font-family:var(--display);font-size:26px;cursor:pointer;color:var(--ink)}
-.stepper output{font-family:var(--display);font-size:30px;min-width:40px;text-align:center}
-.field{display:flex;flex-direction:column;gap:6px}
-.done{background:var(--grass);color:#fff;border-radius:14px;padding:10px 14px;font-weight:800}
-.foot{text-align:center;font-size:13px;color:var(--muted)}
+label,.lbl{font-weight:800;font-size:15px}
+input[type=text]{width:100%;min-height:50px;border:3px solid var(--ink);border-radius:14px;padding:0 14px;font:inherit;font-size:16px;background:#fff;color:var(--ink)}
+input[type=text]:focus{outline:3px solid var(--sun);outline-offset:1px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px}
+.who .field{background:#fff;border:3px dashed var(--grass-dark);border-radius:16px;padding:10px;align-items:center}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper button{width:46px;height:46px;border-radius:50%;border:3px solid var(--ink);background:#fff;font-family:var(--display);font-size:26px;line-height:1;cursor:pointer;color:var(--ink)}
+.stepper button:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+.stepper output{font-family:var(--display);font-size:30px;min-width:36px;text-align:center;font-variant-numeric:tabular-nums}
+.done{background:var(--grass-dark);color:#fff;border-radius:14px;padding:10px 14px;font-weight:800}
+.foot{text-align:center;font-size:13px;color:var(--muted);margin:0}
 .foot a{color:var(--ink);font-weight:800}
 .demo{align-self:center;background:var(--ink);color:#fff;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:99px}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:5;width:100%;height:100%}
-@keyframes walk{from{left:4%}to{left:calc(96% - 150px)}}
+
+/* very small phones */
+@media (max-width:360px){
+  .hint{font-size:11px;padding:5px 10px}
+  .title{right:70px}
+}
+/* desktop: two columns, scene stays in view */
+@media (min-width:880px){
+  .wrap{max-width:1080px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:start;column-gap:28px;padding-block:32px 48px}
+  .demo,.foot{grid-column:1/-1;justify-self:center}
+  .scene{position:sticky;top:calc(24px + env(safe-area-inset-top,0px));height:min(560px, calc(100vh - 140px));min-height:420px}
+  :root{--dino-w:190px;--ground:100px}
+  .title b{font-size:64px}
+}
+
+@keyframes walk{from{left:4%}to{left:calc(96% - var(--dino-w))}}
 @keyframes bob{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-6px) rotate(2deg)}}
-@keyframes jump{0%{transform:translateY(0)}45%{transform:translateY(-90px) rotate(-10deg)}100%{transform:translateY(0)}}
+@keyframes jump{0%{transform:translateY(0)}45%{transform:translateY(-70%) rotate(-10deg)}100%{transform:translateY(0)}}
 @keyframes drift{to{left:110%}}
 @keyframes pulse{50%{box-shadow:0 0 0 18px rgba(255,201,60,.15)}}
 @media (prefers-reduced-motion:reduce){.dino-btn,.dino,.cloud,.sunball{animation:none}.dino-btn{left:30%}}
 </style>
-
+</head>
+<body>
 <canvas id="confetti" aria-hidden="true"></canvas>
 <main class="wrap">
   <span class="demo">Demo · Anse Studio</span>
@@ -95,6 +129,7 @@ input[type=text]{width:100%;min-height:48px;border:3px solid var(--ink);border-r
     <span class="hint" aria-hidden="true">Tocá a Rex</span>
   </section>
 
+  <div class="side">
   <section class="card">
     <p class="lead">¡Benja cumple 5 y lo festeja con una aventura de dinosaurios! Vení con ganas de jugar.</p>
     <div class="facts">
@@ -116,7 +151,7 @@ input[type=text]{width:100%;min-height:48px;border:3px solid var(--ink);border-r
     </div>
     <div class="who">
       <div class="field">
-        <span style="font-weight:800;font-size:15px" id="kids-l">Chicos</span>
+        <span class="lbl" id="kids-l">Chicos</span>
         <div class="stepper" role="group" aria-labelledby="kids-l">
           <button type="button" data-k="kids" data-d="-1" aria-label="Un chico menos">−</button>
           <output id="kids" aria-live="polite">1</output>
@@ -124,7 +159,7 @@ input[type=text]{width:100%;min-height:48px;border:3px solid var(--ink);border-r
         </div>
       </div>
       <div class="field">
-        <span style="font-weight:800;font-size:15px" id="adults-l">Adultos</span>
+        <span class="lbl" id="adults-l">Adultos</span>
         <div class="stepper" role="group" aria-labelledby="adults-l">
           <button type="button" data-k="adults" data-d="-1" aria-label="Un adulto menos">−</button>
           <output id="adults" aria-live="polite">1</output>
@@ -138,6 +173,7 @@ input[type=text]{width:100%;min-height:48px;border:3px solid var(--ink);border-r
     </a>
     <div class="done" id="done" hidden>¡Genial! Rex ya está bailando de alegría 🦖</div>
   </section>
+  </div>
 
   <p class="foot">Invitación diseñada por <a href="https://www.instagram.com/anse_studio_/" target="_blank" rel="noopener">Anse Studio</a></p>
 </main>
@@ -194,7 +230,7 @@ input[type=text]{width:100%;min-height:48px;border:3px solid var(--ink);border-r
   var cv=document.getElementById('confetti'), ctx=cv.getContext('2d'), parts=[], raf=null;
   var cols=['#FF6F59','#FFC93C','#3FAE8A','#7CC95E','#5BC0EB'];
   function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;}
-  size(); addEventListener('resize',size);
+  size(); addEventListener('resize',size); addEventListener('orientationchange',size);
   function burst(k){
     if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     for(var i=0;i<k;i++) parts.push({x:cv.width/2,y:cv.height*0.35,vx:(Math.random()-.5)*16*devicePixelRatio,vy:(-Math.random()*14-4)*devicePixelRatio,r:(4+Math.random()*5)*devicePixelRatio,c:cols[i%5],a:Math.random()*6,life:0});
@@ -210,3 +246,6 @@ input[type=text]{width:100%;min-height:48px;border:3px solid var(--ink);border-r
   }
 })();
 </script>
+
+</body>
+</html>
